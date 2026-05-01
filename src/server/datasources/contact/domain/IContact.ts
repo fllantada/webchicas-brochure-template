@@ -47,10 +47,28 @@ export interface IContact {
   /** Items de horario, ordenados como aparecen en el sitio. */
   schedule: ScheduleItem[];
 
-  /** URLs de redes. Vacío = no se muestra. */
+  /**
+   * URLs completas de redes sociales y plataformas de reseñas. Vacío = no se
+   * muestra. Mantener nombres consistentes para que footer/header decidan
+   * qué iconos pintar via `Object.entries(contact.social).filter(([_, url]) => url)`.
+   */
   social: {
+    /** URL pública de Facebook page. */
     facebook: string;
+    /** URL pública del perfil de Instagram. */
     instagram: string;
+    /** URL del perfil/restaurant en TripAdvisor (alta señal para gastronomía/turismo). */
+    tripadvisor: string;
+    /** URL de TikTok (relevante para restaurantes/marcas de moda/etc.). */
+    tiktok: string;
+    /** URL de Twitter/X (mantener nombre 'twitter' por compatibilidad de iconos). */
+    twitter: string;
+    /** URL de LinkedIn (B2B, profesionales, consultoría). */
+    linkedin: string;
+    /** URL de YouTube channel (videos, tours, demos). */
+    youtube: string;
+    /** Listing de Google Business Profile (mapas + reseñas). */
+    googleBusiness: string;
   };
 
   /** URL externa a Booksy (botón "Reservar"). Si está vacío, ocultar CTAs. */
@@ -87,7 +105,16 @@ export const EMPTY_CONTACT: IContact = {
   addressCity: { ...EMPTY_LOCALIZED },
   mapEmbedUrl: "",
   schedule: [],
-  social: { facebook: "", instagram: "" },
+  social: {
+    facebook: "",
+    instagram: "",
+    tripadvisor: "",
+    tiktok: "",
+    twitter: "",
+    linkedin: "",
+    youtube: "",
+    googleBusiness: "",
+  },
   booksyUrl: "",
   updatedAt: new Date(0),
 };

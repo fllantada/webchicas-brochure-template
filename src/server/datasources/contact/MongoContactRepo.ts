@@ -14,11 +14,21 @@ const MAIN_KEY = "main" as const;
  * o el seed corre). Cacheado por request via React.cache — muchas pages SC
  * leen este doc en el mismo request (header, footer, jsonLd, contacto/page),
  * y no queremos N round-trips a Mongo.
+ *
+ * Hidrata defaults para campos nuevos del shape: si la DB tiene un doc creado
+ * antes de que se agregaran campos (ej. social.tripadvisor en 2026-05-01), el
+ * merge garantiza que el caller siempre reciba el shape completo. Sin esto,
+ * `contact.social.tripadvisor` podría ser undefined y romper TS strict.
  */
 export const getContact = cache(async (): Promise<IContact> => {
   const collection = await getCollection<IContact>(COLLECTION);
   const doc = await collection.findOne({ key: MAIN_KEY });
-  return doc ?? { ...EMPTY_CONTACT };
+  if (!doc) return { ...EMPTY_CONTACT };
+  return {
+    ...EMPTY_CONTACT,
+    ...doc,
+    social: { ...EMPTY_CONTACT.social, ...(doc.social ?? {}) },
+  };
 });
 
 /**
