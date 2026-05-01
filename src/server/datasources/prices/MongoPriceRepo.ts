@@ -86,3 +86,17 @@ export async function deletePrice(id: string): Promise<boolean> {
   const result = await collection.deleteOne({ _id: new ObjectId(id) });
   return result.deletedCount === 1;
 }
+
+/**
+ * Devuelve `true` si hay al menos 1 precio en la colección. Útil para que el
+ * sidebar admin muestre el link "Precios" solo si el cliente lo está usando
+ * (template polirrubrico — no todos los clientes son estética/peluquería).
+ *
+ * Mismo patrón que `hasAnyMenuItems()` en MongoMenuRepo. Ver IA-docs admin
+ * regla #6 (polirrubrismo).
+ */
+export async function hasAnyPrices(): Promise<boolean> {
+  const collection = await getCollection<IPrice>(COLLECTION);
+  const count = await collection.countDocuments({}, { limit: 1 });
+  return count > 0;
+}

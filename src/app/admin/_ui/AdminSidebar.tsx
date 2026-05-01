@@ -3,21 +3,32 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-interface NavItem {
+export interface NavItem {
+  /** Label visible al cliente en español, sin jerga técnica. */
   label: string;
+  /** Path absoluto del admin (ej. `/admin/menu`). */
   href: string;
+  /** Si `true`, se renderiza inerte con badge "pronto". */
   disabled?: boolean;
 }
 
-const ITEMS: NavItem[] = [
-  { label: "Inicio", href: "/admin/dashboard" },
-  { label: "Imágenes", href: "/admin/media" },
-  { label: "Contacto", href: "/admin/contact" },
-  { label: "Precios", href: "/admin/prices" },
-];
+interface AdminSidebarProps {
+  /**
+   * Items filtrados por el SC padre `AdminSidebarSC` según los módulos activos
+   * del cliente. Pasar solo links que tienen datos — el sidebar NO decide qué
+   * mostrar. Polirrubrismo: ver IA-docs admin regla #6.
+   */
+  items: NavItem[];
+}
 
-/** Sidebar admin — drawer hamburger en mobile, lateral fijo en desktop. */
-export function AdminSidebar() {
+/**
+ * Sidebar admin — drawer hamburger en mobile, lateral fijo en desktop.
+ *
+ * Es Client Component por drawer state + highlight de ruta activa. La lista
+ * de items la recibe del SC padre que checkea `hasAny*Items()` en Mongo
+ * (ver `AdminSidebarSC`).
+ */
+export function AdminSidebar({ items }: AdminSidebarProps) {
   const pathname = usePathname() ?? "";
   const [open, setOpen] = useState(false);
 
@@ -84,7 +95,7 @@ export function AdminSidebar() {
         </div>
 
         <nav className="flex-1 py-2 overflow-y-auto">
-          {ITEMS.map((item) => {
+          {items.map((item) => {
             const isActive =
               item.href === "/admin/dashboard"
                 ? pathname === "/admin/dashboard"

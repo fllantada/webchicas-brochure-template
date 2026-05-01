@@ -40,7 +40,39 @@ Magic link es para entrar la primera vez. Después, cookie de 30 días — el cl
 - Si EN está vacío, mostrar warning suave ("Sin traducción") pero permitir guardar
 - NUNCA auto-traducir con Google — el cliente decide cuándo poblar EN
 
-### 6. Performance
+### 6. Polirrubrismo: esconder lo que no se usa
+
+El template es **multi-rubro** (resto, estética, peluquería, construcción, fotografía...). Cada cliente activa solo los módulos que le sirven. La UI debe **esconder dinámicamente** lo que el cliente no usa — sino el panel se llena de tabs vacías y confunde.
+
+**Patrón obligatorio**: cada link/sección/módulo del admin debe checkear `hasAny*Items()` (helper en cada `Mongo*Repo`) antes de renderizarse.
+
+```ts
+// Server Component (admin/_ui/AdminSidebar) lee el estado:
+const [hasMenu, hasPrices] = await Promise.all([
+  hasAnyMenuItems(),
+  hasAnyPrices(),
+]);
+
+// Pasa a CC solo los items que aplican:
+const items = [
+  { label: "Inicio", href: "/admin/dashboard", show: true },
+  { label: "Imágenes", href: "/admin/media", show: true },
+  { label: "Contacto", href: "/admin/contact", show: true },
+  hasMenu && { label: "Menú", href: "/admin/menu", show: true },
+  hasPrices && { label: "Precios", href: "/admin/prices", show: true },
+].filter(Boolean);
+```
+
+**Inverso**: si un módulo está vacío hoy pero el cliente lo va a usar, hay que tener un punto de entrada para crear el primer item (típicamente desde Dashboard, no desde sidebar). Cuando crea el primer registro, el link aparece en sidebar automáticamente al siguiente render.
+
+**Aplica también a**:
+- CTAs de "ver todos los X" en Dashboard (esconder si no hay X)
+- Links del Footer/Header del sitio público (`/carta`, `/tarifas`) que dependen de qué módulos tiene activos el cliente
+- Schema.org JSON-LD: si hay menu_items → `@type: Restaurant + hasMenu`. Si hay prices estética → `@type: BeautySalon`. Si nada → `@type: LocalBusiness` genérico.
+
+**Anti-patrón**: dejar links estáticos hardcoded apuntando a páginas vacías. Es la diferencia entre admin "que se siente hecho para mí" vs "que parece un template genérico".
+
+### 7. Performance
 
 - Server Components donde se pueda (admin pages típicamente lo son)
 - No bundle gigante en el admin — Tailwind tree-shake + componentes dinámicos
