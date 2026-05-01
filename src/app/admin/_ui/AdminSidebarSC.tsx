@@ -2,6 +2,7 @@ import { hasAnyMenuItems } from "@/server/datasources/menu/MongoMenuRepo";
 import { hasAnyPrices } from "@/server/datasources/prices/MongoPriceRepo";
 
 import { AdminSidebar, type NavItem } from "./AdminSidebar";
+import { ADMIN_UI_AVAILABLE } from "./availableModules";
 
 /**
  * Sidebar admin Server Component — decide qué links mostrar según los módulos
@@ -23,12 +24,17 @@ export async function AdminSidebarSC() {
     hasAnyPrices(),
   ]);
 
+  // Doble check: datos en Mongo (hasAny*) + admin UI implementada
+  // (ver availableModules.ts). Sin ambos, no exponer el link.
+  const showMenu = hasMenu && ADMIN_UI_AVAILABLE.menu;
+  const showPrices = hasPrices && ADMIN_UI_AVAILABLE.prices;
+
   const items: NavItem[] = [
     { label: "Inicio", href: "/admin/dashboard" },
     { label: "Imágenes", href: "/admin/media" },
     { label: "Contacto", href: "/admin/contact" },
-    ...(hasMenu ? [{ label: "Menú", href: "/admin/menu" }] : []),
-    ...(hasPrices ? [{ label: "Precios", href: "/admin/prices" }] : []),
+    ...(showMenu ? [{ label: "Menú", href: "/admin/menu" }] : []),
+    ...(showPrices ? [{ label: "Precios", href: "/admin/prices" }] : []),
   ];
 
   return <AdminSidebar items={items} />;

@@ -48,27 +48,20 @@ export interface IContact {
   schedule: ScheduleItem[];
 
   /**
-   * URLs completas de redes sociales y plataformas de reseñas. Vacío = no se
-   * muestra. Mantener nombres consistentes para que footer/header decidan
-   * qué iconos pintar via `Object.entries(contact.social).filter(([_, url]) => url)`.
+   * URLs de redes que el sitio público RENDERIZA. Vacío = no se muestra.
+   *
+   * YAGNI/KISS — solo agregar campos cuando un cliente real los necesite Y
+   * el footer/header los renderice. Agregar un campo "por si acaso" + admin
+   * que pide al cliente cargar algo que nunca se ve es anti-UX (regla
+   * IA-docs admin §7: simetría admin↔visible).
    */
   social: {
-    /** URL pública de Facebook page. */
+    /** URL de Facebook page. */
     facebook: string;
-    /** URL pública del perfil de Instagram. */
+    /** URL de Instagram. */
     instagram: string;
-    /** URL del perfil/restaurant en TripAdvisor (alta señal para gastronomía/turismo). */
+    /** URL de TripAdvisor (alta señal para gastronomía/turismo). */
     tripadvisor: string;
-    /** URL de TikTok (relevante para restaurantes/marcas de moda/etc.). */
-    tiktok: string;
-    /** URL de Twitter/X (mantener nombre 'twitter' por compatibilidad de iconos). */
-    twitter: string;
-    /** URL de LinkedIn (B2B, profesionales, consultoría). */
-    linkedin: string;
-    /** URL de YouTube channel (videos, tours, demos). */
-    youtube: string;
-    /** Listing de Google Business Profile (mapas + reseñas). */
-    googleBusiness: string;
   };
 
   /** URL externa a Booksy (botón "Reservar"). Si está vacío, ocultar CTAs. */
@@ -109,11 +102,6 @@ export const EMPTY_CONTACT: IContact = {
     facebook: "",
     instagram: "",
     tripadvisor: "",
-    tiktok: "",
-    twitter: "",
-    linkedin: "",
-    youtube: "",
-    googleBusiness: "",
   },
   booksyUrl: "",
   updatedAt: new Date(0),

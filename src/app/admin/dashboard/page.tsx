@@ -4,6 +4,8 @@ import { getAdminUser } from "@/lib/auth";
 import { hasAnyMenuItems } from "@/server/datasources/menu/MongoMenuRepo";
 import { hasAnyPrices } from "@/server/datasources/prices/MongoPriceRepo";
 
+import { ADMIN_UI_AVAILABLE } from "../_ui/availableModules";
+
 import { OnboardingChecklist } from "./components/OnboardingChecklist";
 
 /**
@@ -63,14 +65,14 @@ export default async function DashboardPage() {
             title="Contacto"
             description="Teléfono, email, dirección, mapa, horarios, redes y reservas."
           />
-          {hasMenu && (
+          {hasMenu && ADMIN_UI_AVAILABLE.menu && (
             <DashboardCard
               href="/admin/menu"
               title="Menú"
               description="Carta del restaurante con categorías, descripciones, precios y notas, bilingüe."
             />
           )}
-          {hasPrices && (
+          {hasPrices && ADMIN_UI_AVAILABLE.prices && (
             <DashboardCard
               href="/admin/prices"
               title="Precios"

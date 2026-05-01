@@ -72,7 +72,46 @@ const items = [
 
 **Anti-patrón**: dejar links estáticos hardcoded apuntando a páginas vacías. Es la diferencia entre admin "que se siente hecho para mí" vs "que parece un template genérico".
 
-### 7. Performance
+**Sub-regla — no exponer links a páginas que no existen** (capitalizado 2026-05-02):
+
+Tener datos en Mongo (`hasAny*Items()`) no garantiza que la admin UI esté implementada. Antes de mostrar un link en sidebar/dashboard, validar **dos** flags:
+
+```ts
+import { ADMIN_UI_AVAILABLE } from "@/app/admin/_ui/availableModules";
+
+const showMenu = hasAnyMenuItems() && ADMIN_UI_AVAILABLE.menu;
+const showPrices = hasAnyPrices() && ADMIN_UI_AVAILABLE.prices;
+```
+
+`ADMIN_UI_AVAILABLE` es una constante explícita en `_ui/availableModules.ts` que indica si la página `/admin/{module}` está construida. Cuando se implemente la UI CRUD del módulo, switchear a `true`.
+
+**Por qué la doble validación**: el backend de un módulo puede estar listo (modelo + repo + script seed) y la página pública (`/carta`, `/tarifas`) renderizando, pero la admin UI puede no existir aún. Mostrar el link al cliente → 404. Falla del principio "no exponer cocina sin terminar".
+
+Bug detectado por el user durante smoke test cuerno-autoadministrable (2026-05-02): hicimos backend + página pública + flag polirrubrico de Menu, pero no construimos `/admin/menu/page.tsx`. Cliente clickeó "Menú" en sidebar → 404. Capitalizado con `ADMIN_UI_AVAILABLE`.
+
+### 7. Simetría admin ↔ visible (YAGNI / KISS / UX-first)
+
+> **Regla canónica del user (2026-05-02)**: "no pones a autoadministrar algo que no está visible".
+
+Cada campo del admin debe **mapearse a algo visible en el sitio público**. Si el cliente carga un dato y nunca se ve, el campo es ruido — y peor, hace que el cliente piense "completé el formulario pero no aparece nada, ¿está roto?". Los clientes brochure son NO-técnicos y **se marean fácil**: cada input, cada label, cada sección que no entienden los desconcentra.
+
+**Aplicación**:
+- Antes de agregar un campo a un `Repo` o un input al admin → verificar que algún componente del sitio público lo renderice. Si no, el campo no va.
+- Si el sitio renderiza un campo condicional (`{contact.X && <Foo />}`), el admin SÍ debe permitir cargarlo. Pero si el campo NO está renderizado en ningún lado, NO va al admin.
+- Inverso: si en el sitio se renderiza algo hardcoded (sin venir de admin), o se mueve a admin o se acepta que NO es editable por el cliente. **No dejar campos zombie del modelo que nadie llena ni renderiza.**
+
+**Aplicación retroactiva** del bug detectado con `IContact.social` (2026-05-02): agregamos 6 redes (`tripadvisor`, `tiktok`, `twitter`, `linkedin`, `youtube`, `googleBusiness`) al modelo + admin **antes** de agregarlas al Footer/Header del sitio público. Resultado: el cliente entra a /admin/contact, ve 6 inputs nuevos, los completa, no se ven nada. Disconnect.
+
+**Fix correcto**: revertir a las 3 que SÍ se renderizan (`facebook`, `instagram`, `tripadvisor`). Si después un cliente real necesita TikTok, agregar TikTok al footer + al modelo + al admin **a la vez**. YAGNI.
+
+### Filosofía operativa
+
+- **YAGNI** (You Aren't Gonna Need It): no agregar campos/módulos/secciones para casos hipotéticos. Solo cuando un cliente real lo pide.
+- **KISS** (Keep It Simple, Stupid): el admin debe tener el **mínimo** de inputs para que el cliente complete su sitio. Cada input extra suma fricción.
+- **UX/UI first**: cuando hay tradeoff entre código limpio y experiencia del cliente NO-técnico, gana el cliente. El admin está hecho **para él**, no para nosotros.
+- **El cliente se marea fácil**: si una sección tiene >5 inputs, dividirla. Si un input necesita explicación, repensarlo. Si hay un dropdown con más de 7 opciones, agrupar.
+
+### 8. Performance
 
 - Server Components donde se pueda (admin pages típicamente lo son)
 - No bundle gigante en el admin — Tailwind tree-shake + componentes dinámicos
