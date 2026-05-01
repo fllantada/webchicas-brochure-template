@@ -88,22 +88,39 @@ function inferQuality(buffer: Buffer): ImageQuality {
 
 /**
  * Genera una key estable para Vercel Blob a partir de la metadata de la imagen.
- * - Si está en `/hero/` y es la primera de esa página → `hero-main`
- * - Si está en `/hero/` y no es la primera → `hero-{section}` o `hero-{idx}`
- * - Si está en `/gallery/` → `gallery-{filename-sin-extension}`
- * - Resto → `{category}-{filename}`
+ *
+ * Convenciones (estables — no cambiar sin migrar imágenes existentes):
+ * - `hero-main`: primera imagen del array byPage.index con category="hero"
+ *   (suele ser la portada del sitio, la más importante)
+ * - `hero-{section-slug}`: resto de heros, slugificando section (ej. "el-restaurante" tal cual)
+ * - `gallery-{filename-sin-ext}`: galleries (filename del archivo original
+ *   suele ser semántico — ej. "tapas.jpg" → "gallery-tapas")
+ * - `service-{filename-sin-ext}`: imágenes de servicios
+ * - `about-{filename-sin-ext}`: imágenes de "sobre nosotros"
+ *
+ * `idx` es el contador global de imágenes procesadas para distinguir múltiples
+ * heros sin section (heuristic fallback).
  */
-function deriveKey(entry: ImageManifestEntry, idx: number): string {
+function deriveKey(entry: ImageManifestEntry, heroIdx: number): string {
   const filename = entry.localPath.split("/").pop() ?? "img";
   const baseNoExt = filename.replace(/\.[^.]+$/, "");
   if (entry.category === "hero") {
-    return idx === 0 ? "hero-main" : `hero-${entry.section || idx}`;
+    if (heroIdx === 0) return "hero-main";
+    return entry.section ? `hero-${entry.section}` : `hero-${heroIdx}`;
   }
   if (entry.category === "gallery") {
     return `gallery-${baseNoExt}`;
   }
   return `${entry.category}-${baseNoExt}`;
 }
+
+/**
+ * Categorías de imagen que deben skipearse del media collection:
+ * - icons: favicons sociales (FB/IG/etc) — irrelevantes, livianos
+ * - logos: van a brand/logos/ del template, no a media (decorativos del template)
+ * - other / general bg: si la categoría es ambigua, mejor ignorar
+ */
+const SKIP_CATEGORIES = new Set(["icons", "logos"]);
 
 async function migrateImages(): Promise<void> {
   const manifestPath = join(CAPTURE, "images/images-manifest.json");
@@ -117,13 +134,12 @@ async function migrateImages(): Promise<void> {
 
   let uploaded = 0;
   let skipped = 0;
-  let idx = 0;
+  let heroIdx = 0;
   for (const pageEntries of Object.values(manifest.byPage)) {
     for (const entry of pageEntries) {
-      // Saltear iconos pequeños (favicons sociales, etc.) — irrelevantes
-      if (entry.category === "icons") continue;
-      const key = deriveKey(entry, idx);
-      idx++;
+      if (SKIP_CATEGORIES.has(entry.category)) continue;
+      const key = deriveKey(entry, heroIdx);
+      if (entry.category === "hero") heroIdx++;
       const existing = await getMediaByKey(key);
       if (existing) {
         console.log(`  [skip] ${key} ya existe`);
