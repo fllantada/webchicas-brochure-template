@@ -14,6 +14,10 @@
     "twitter_title": "Bienvenidos",
     "twitter_description": "Sitio web del cliente"
   },
+  "menu": {
+    "page_title": "Nuestra carta",
+    "page_description": "Platos y bebidas de temporada. Pregúntanos por el plato del día."
+  },
   "header": {
     "book_appointment": "Reservar",
     "logo_alt": "Logotipo"

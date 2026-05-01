@@ -14,6 +14,10 @@
     "twitter_title": "Welcome",
     "twitter_description": "Client website"
   },
+  "menu": {
+    "page_title": "Our menu",
+    "page_description": "Seasonal dishes and drinks. Ask us about today's special."
+  },
   "header": {
     "book_appointment": "Book",
     "logo_alt": "Logo"
