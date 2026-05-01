@@ -9,13 +9,28 @@ import { useTranslations } from "next-intl";
 import LanguageSelector from "@/components/ui/LanguageSelector";
 import type { PlainContact } from "@/server/datasources/contact/domain/IContact";
 
+export interface HeaderNavItem {
+  /** Texto visible (ya traducido). */
+  label: string;
+  /** Path del link (relativo al locale, sin prefijo). */
+  href: string;
+  /** Subitems opcionales (dropdown desktop / acordeón mobile). */
+  children?: { label: string; href: string }[];
+}
+
 interface Props {
   /** Datos de contacto del sitio. Necesarios para teléfono visible, CTA Booksy
    *  e info de contacto del menú mobile. */
   contact: PlainContact;
+  /**
+   * Items del nav. Lo arma el SC padre `HeaderSC` según los módulos activos
+   * del cliente (ver IA-docs admin §6 polirrubrismo). Si no se pasa, fallback
+   * a los items base (Inicio + Contacto) — solo para tests/storybook.
+   */
+  navItems?: HeaderNavItem[];
 }
 
-export default function Header({ contact }: Props) {
+export default function Header({ contact, navItems }: Props) {
   const t = useTranslations("nav");
   const th = useTranslations("header");
   const pathname = usePathname();
@@ -27,14 +42,8 @@ export default function Header({ contact }: Props) {
 
   useEffect(() => { setMounted(true); }, []);
 
-  // NAV_ITEMS minimal — el cliente customiza agregando páginas + entries acá.
-  // El template arranca con Inicio + Contacto. Cuando se agregan /servicios,
-  // /galeria, etc, sumar al array.
-  const NAV_ITEMS: Array<{
-    label: string;
-    href: string;
-    children?: { label: string; href: string }[];
-  }> = [
+  // Fallback solo si el SC padre no proveyó items (no debería en producción).
+  const NAV_ITEMS: HeaderNavItem[] = navItems ?? [
     { label: t("home"), href: "/" },
     { label: t("contact"), href: "/contacto" },
   ];

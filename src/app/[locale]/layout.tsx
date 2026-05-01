@@ -3,7 +3,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 import { pickLocale, type Locale } from "@/i18n/locales";
-import Header from "@/components/layout/Header";
+import { HeaderSC } from "@/components/layout/Header/HeaderSC";
 import Footer from "@/components/layout/Footer";
 import MobileStickyCTA from "@/components/ui/MobileStickyCTA";
 import { getContact } from "@/server/datasources/contact/MongoContactRepo";
@@ -169,7 +169,7 @@ export default async function LocaleLayout({
         {tc("skip_to_content")}
       </a>
       <NextIntlClientProvider messages={messages}>
-        <Header contact={plainContact} />
+        <HeaderSC contact={plainContact} locale={locale} />
         <main id="main">{children}</main>
         <Footer contact={plainContact} />
         <MobileStickyCTA booksyUrl={plainContact.booksyUrl} />

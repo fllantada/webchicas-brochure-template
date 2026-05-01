@@ -20,6 +20,8 @@
   },
   "nav": {
     "home": "Home",
+    "menu": "Menu",
+    "prices": "Rates",
     "contact": "Contact",
     "main_nav_label": "Main navigation",
     "mobile_nav_label": "Mobile menu",

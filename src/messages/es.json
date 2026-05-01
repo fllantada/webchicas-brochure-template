@@ -20,6 +20,8 @@
   },
   "nav": {
     "home": "Inicio",
+    "menu": "Carta",
+    "prices": "Tarifas",
     "contact": "Contacto",
     "main_nav_label": "Navegación principal",
     "mobile_nav_label": "Menú móvil",
