@@ -95,15 +95,24 @@ export function LoginForm() {
 
         {step === "email" ? (
           <form onSubmit={handleRequestCode} className="space-y-4">
-            <input
-              type="email"
-              placeholder="tu@email.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              autoFocus
-              className="w-full rounded-lg border border-border bg-bg px-4 py-3 text-base text-ink placeholder:text-muted focus:border-accent focus:outline-none"
-            />
+            <div>
+              <label
+                htmlFor="login-email"
+                className="block text-sm font-medium text-ink mb-2"
+              >
+                Tu email de acceso
+              </label>
+              <input
+                id="login-email"
+                type="email"
+                placeholder="tu@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                autoFocus
+                className="w-full rounded-lg border border-border bg-bg px-4 py-3 text-base text-ink placeholder:text-muted focus:border-accent focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+              />
+            </div>
             {error && <p className="text-sm text-red-600">{error}</p>}
             <button
               type="submit"
@@ -115,19 +124,28 @@ export function LoginForm() {
           </form>
         ) : (
           <form onSubmit={handleVerifyCode} className="space-y-4">
-            <input
-              type="text"
-              placeholder="ABCDEF"
-              value={code}
-              onChange={(e) =>
-                setCode(e.target.value.toUpperCase().slice(0, 6))
-              }
-              maxLength={6}
-              required
-              autoFocus
-              inputMode="text"
-              className="w-full rounded-lg border border-border bg-bg px-4 py-3 text-center text-2xl tracking-[0.4em] text-ink focus:border-accent focus:outline-none"
-            />
+            <div>
+              <label
+                htmlFor="login-code"
+                className="block text-sm font-medium text-ink mb-2"
+              >
+                Código de 6 letras del email
+              </label>
+              <input
+                id="login-code"
+                type="text"
+                placeholder="ABCDEF"
+                value={code}
+                onChange={(e) =>
+                  setCode(e.target.value.toUpperCase().slice(0, 6))
+                }
+                maxLength={6}
+                required
+                autoFocus
+                inputMode="text"
+                className="w-full rounded-lg border border-border bg-bg px-4 py-3 text-center text-2xl tracking-[0.4em] text-ink focus:border-accent focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+              />
+            </div>
             {error && <p className="text-sm text-red-600">{error}</p>}
             <button
               type="submit"

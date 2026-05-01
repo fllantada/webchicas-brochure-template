@@ -26,7 +26,7 @@ interface Props {
 }
 
 const inputClass =
-  "w-full rounded-md border border-border bg-bg px-3 py-2.5 text-base text-ink placeholder:text-subtle focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent transition-colors";
+  "w-full rounded-md border border-border bg-bg px-3 py-2.5 text-base text-ink placeholder:text-subtle focus:border-accent focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent focus:ring-1 focus:ring-accent transition-colors";
 
 /** Form completo de un precio (crear y editar usan el mismo). */
 export function PriceEditor({ id, initial }: Props) {

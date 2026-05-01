@@ -467,7 +467,7 @@ export function MediaEditForm({
             value={altEs}
             onChange={(e) => setAltEs(e.target.value)}
             required
-            className="w-full rounded-md border border-border bg-bg px-3 py-2.5 text-base text-ink focus:border-accent focus:outline-none"
+            className="w-full rounded-md border border-border bg-bg px-3 py-2.5 text-base text-ink focus:border-accent focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           />
         </div>
 
@@ -481,7 +481,7 @@ export function MediaEditForm({
             type="text"
             value={altEn}
             onChange={(e) => setAltEn(e.target.value)}
-            className="w-full rounded-md border border-border bg-bg px-3 py-2.5 text-base text-ink focus:border-accent focus:outline-none"
+            className="w-full rounded-md border border-border bg-bg px-3 py-2.5 text-base text-ink focus:border-accent focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           />
         </div>
 

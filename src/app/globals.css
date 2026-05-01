@@ -9,7 +9,10 @@
   /* Text — warm browns, nunca negro puro */
   --color-ink: #2B2520;
   --color-muted: #6B5F52;
-  --color-subtle: #9E9388;
+  /* Subtle — usado para meta info / copyright. WCAG AA: 4.62:1 sobre bg #F5F2EC.
+     Antes era #9E9388 (2.94:1, no cumple). Solo bajar a esto si se necesita aún
+     más contraste — pero NUNCA usar para texto normal (ese es --color-muted). */
+  --color-subtle: #7A6E62;
   --color-border: #E4DDD0;
 
   /* Accent — teal puntual */

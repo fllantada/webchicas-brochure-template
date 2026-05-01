@@ -32,7 +32,7 @@ export function BilingualInput({
 }: Props) {
   const Tag = multiline ? "textarea" : "input";
   const baseClass =
-    "w-full rounded-md border border-border bg-bg px-3 py-2.5 text-base text-ink placeholder:text-subtle focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent transition-colors";
+    "w-full rounded-md border border-border bg-bg px-3 py-2.5 text-base text-ink placeholder:text-subtle focus:border-accent focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent focus:ring-1 focus:ring-accent transition-colors";
 
   return (
     <div>

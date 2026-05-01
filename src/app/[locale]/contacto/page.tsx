@@ -162,7 +162,7 @@ export default async function ContactoPage() {
                   name="name"
                   type="text"
                   required
-                  className="w-full bg-transparent border-0 border-b border-border focus:border-ink focus:outline-none py-2 text-base text-ink transition-colors"
+                  className="w-full bg-transparent border-0 border-b border-border focus:border-ink focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent py-2 text-base text-ink transition-colors"
                 />
               </div>
               <div>
@@ -177,7 +177,7 @@ export default async function ContactoPage() {
                   name="email"
                   type="email"
                   required
-                  className="w-full bg-transparent border-0 border-b border-border focus:border-ink focus:outline-none py-2 text-base text-ink transition-colors"
+                  className="w-full bg-transparent border-0 border-b border-border focus:border-ink focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent py-2 text-base text-ink transition-colors"
                 />
               </div>
               <div>
@@ -192,7 +192,7 @@ export default async function ContactoPage() {
                   name="message"
                   rows={4}
                   required
-                  className="w-full bg-transparent border-0 border-b border-border focus:border-ink focus:outline-none py-2 text-base text-ink transition-colors resize-none"
+                  className="w-full bg-transparent border-0 border-b border-border focus:border-ink focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent py-2 text-base text-ink transition-colors resize-none"
                 />
               </div>
               <div className="flex items-start gap-3">

@@ -162,11 +162,9 @@ export default function Header({ contact }: Props) {
         </div>
 
         <div className="flex lg:hidden items-center gap-1">
-          <LanguageSelector variant={scrolled ? "default" : "light"} />
+          <LanguageSelector variant="default" />
           <button
-            className={`p-2.5 -mr-2 cursor-pointer transition-colors ${
-              scrolled ? "text-ink" : "text-white drop-shadow-sm"
-            }`}
+            className="p-2.5 -mr-2 cursor-pointer transition-colors text-ink"
             onClick={() => setMobileOpen((o) => !o)}
             aria-label={t("menu_label")}
             aria-expanded={mobileOpen}
