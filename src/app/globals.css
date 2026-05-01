@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+@theme {
+  /* Canvas — warm editorial neutrals (vida, luz, juventud) */
+  --color-bg: #F5F2EC;
+  --color-surface: #EFEAE0;
+  --color-elevated: #FBF8F2;
+
+  /* Text — warm browns, nunca negro puro */
+  --color-ink: #2B2520;
+  --color-muted: #6B5F52;
+  --color-subtle: #9E9388;
+  --color-border: #E4DDD0;
+
+  /* Accent — teal puntual */
+  --color-accent: #0D6666;
+  --color-accent-hover: #094D4D;
+  --color-accent-soft: #D4E4E4;
+
+  /* Warm pop — para kickers, hairlines vivas, acentos suaves */
+  --color-warm: #C97C5D;
+  --color-warm-soft: #F4DFD2;
+
+  /* Legacy aliases */
+  --color-primary: var(--color-accent);
+  --color-primary-dark: var(--color-accent-hover);
+  --color-primary-light: var(--color-accent);
+  --color-primary-subtle: var(--color-accent-soft);
+  --color-light: var(--color-surface);
+  --color-body: var(--color-ink);
+  --color-heading: var(--color-ink);
+  --color-dark: var(--color-ink);
+
+  /* Fonts */
+  --font-heading: "Raleway", sans-serif;
+  --font-body: "Nunito Sans", sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 17px;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--color-ink);
+  background: var(--color-bg);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  color: var(--color-ink);
+}
+
+/* Editorial image treatment — unify stock + real photography */
+.img-unified {
+  filter: saturate(0.92) contrast(1.04);
+}
+
+/* Kicker label — uppercase tiny label on top of section titles */
+.kicker {
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Hairline divider with warm pop — for section transitions and kickers */
+.hairline-warm {
+  display: inline-block;
+  width: 32px;
+  height: 1px;
+  background: var(--color-warm);
+  flex-shrink: 0;
+}
+
+/* Numbers as display — tech-forward stat element */
+.num-display {
+  font-family: var(--font-heading);
+  font-weight: 300;
+  color: var(--color-accent);
+  letter-spacing: -0.03em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
