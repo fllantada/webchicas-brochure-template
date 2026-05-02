@@ -8,14 +8,10 @@
  *   const showMenu = hasAnyMenuItems() && ADMIN_UI_AVAILABLE.menu;
  *
  * Por qué la distinción:
- * - El backend del módulo Menu (IMenuItem + MongoMenuRepo) está listo y
- *   la página pública `/carta` lo renderiza — pero la admin UI CRUD del
- *   menú todavía NO está construida (capitalizable pendiente del template).
- * - Mostrar el link "Menú" en sidebar antes de tener la UI rompe expectativa:
+ * - Cada módulo tiene un trio (datasource + página pública + página admin) que
+ *   puede estar parcialmente construido. Cuando los 3 están, se setea `true`.
+ * - Mostrar un link en sidebar a una admin UI que no existe rompe expectativa:
  *   el cliente click → 404. Falla del principio "no exponer cocina sin terminar".
- *
- * Cuando se implemente `/admin/menu/page.tsx` (CRUD bilingüe + live preview,
- * copy-adapt de `/admin/prices/`), cambiar `menu: true` y borrar este comentario.
  */
 export const ADMIN_UI_AVAILABLE = {
   /** /admin/contact — implementada con BilingualInput + ScheduleSection. */
@@ -24,6 +20,6 @@ export const ADMIN_UI_AVAILABLE = {
   media: true,
   /** /admin/prices — implementada con CRUD bilingüe + live preview + categorías. */
   prices: true,
-  /** /admin/menu — NO implementada. Backend listo, falta UI CRUD. */
-  menu: false,
+  /** /admin/menu — implementada con CRUD bilingüe + live preview + 16 categorías gastronómicas. */
+  menu: true,
 } as const;
