@@ -89,6 +89,77 @@ const showPrices = hasAnyPrices() && ADMIN_UI_AVAILABLE.prices;
 
 Bug detectado por el user durante smoke test cuerno-autoadministrable (2026-05-02): hicimos backend + página pública + flag polirrubrico de Menu, pero no construimos `/admin/menu/page.tsx`. Cliente clickeó "Menú" en sidebar → 404. Capitalizado con `ADMIN_UI_AVAILABLE`.
 
+### MÓDULOS PENDIENTES — blueprints listos para construir cuando un cliente real lo necesite
+
+> Estos módulos NO existen todavía en el template (YAGNI). Se construyen cuando el primer cliente real los pide. El blueprint completo está acá para que la implementación sea rápida y consistente con la regla maestra.
+
+#### Blueprint A — `MongoTextRepo` / `Sections` (CRÍTICO — bloquea simetría admin↔visible para copy del cliente)
+
+**Problema**: Hoy el copy del cliente (hero title, subtitle, CTAs, descripciones de secciones, footer brand_description) vive en `messages/{es,en}.json`. El cliente NO puede editarlo desde admin → viola simetría → "autoadministrable" es promesa falsa.
+
+**Solución (capitalizada 2026-05-02)**:
+
+```ts
+// src/server/datasources/texts/domain/IText.ts
+export interface IText {
+  _id?: ObjectId;
+  /** Key estable: "home.hero.title", "footer.brand_description", "rgpd.responsible_name" */
+  key: string;
+  /** Grupo para agrupar en admin UI: "home" | "footer" | "header" | "legal" | "metadata" | "contact" */
+  group: TextGroup;
+  /** Etiqueta visible en admin (NO técnica). Ej: "Título del hero". */
+  label: LocalizedText;
+  /** Pista para el cliente ("Aparece como título grande en la home"). */
+  hint?: LocalizedText;
+  /** Tipo de input: textarea para descripciones, text para títulos. */
+  inputType: "text" | "textarea";
+  /** El contenido editable. */
+  body: LocalizedText;
+  updatedAt: Date;
+}
+```
+
+**Repo** con: `getText(key)` cacheado (`React.cache`), `getTexts(keys[])` bulk para evitar N requests, `upsertText`, `listTextsByGroup`, `ensureSeedTexts` idempotente.
+
+**Render**: SC consumen `getTexts(["home.hero.title", "home.hero.subtitle"])` con fallback a constante en código si Mongo está vacío.
+
+**Admin UI** `/admin/texts`: lista agrupada por `group` (Home, Footer, Legal, etc), `BilingualInput` lado a lado, sticky save bar, live preview opcional iframeando `/?preview=1`. **Patrón exacto de `/admin/contact`**.
+
+**Decisión binaria — qué va a Mongo vs i18n**:
+
+| Tipo | Vive en | Ejemplos |
+|---|---|---|
+| Copy de marca | **Mongo (`Texts`)** | `home.hero.title`, `footer.brand_description`, `rgpd.responsible_name` |
+| UI chrome | `messages/{es,en}.json` | `nav.home`, `header.book_appointment`, `form_submit`, `skip_to_content` |
+| Estructura semántica | i18n constants | `MENU_CATEGORY_LABELS`, schema labels |
+
+**Migración**: capturar (con `web-capture`) el copy original y poblar `Texts` con `ensureSeedTexts()` antes del primer deploy. El template trae seeds default vacíos con todas las keys ya creadas (cliente abre `/admin/texts` y ve qué editar — no campos en blanco que tiene que adivinar).
+
+#### Blueprint B — Admin UI `/admin/menu` (CRÍTICO — bloquea clientes restaurante)
+
+**Problema**: backend `MongoMenuRepo` + página pública `/carta` existen, pero **NO hay admin UI**. `ADMIN_UI_AVAILABLE.menu = false` esconde el link → cliente restaurante no puede editar su carta. Falla la promesa autoadministrable para todo cliente gastronómico.
+
+**Solución**: copy-adapt de `/admin/prices/` (estructura idéntica). Diferencias específicas a IMenuItem:
+- Eliminar `isFromPrice`, `durationMinutes` (no aplican)
+- Mantener `priceOverride` (mismo nombre y semántica)
+- Agregar `priceNote` (LocalizedText) como input opcional debajo de price
+- Agregar `tags: string[]` como pills checkbox (vegetariano, sin-gluten, picante)
+- Agregar `imageKey: string` opcional (selector de media existente)
+
+Cuando esté implementado: switch `ADMIN_UI_AVAILABLE.menu = true` en `availableModules.ts`.
+
+#### Blueprint C — RGPD/Cookies en IContact (CRÍTICO — compliance)
+
+**Problema**: `messages/{es,en}.json` tiene `rgpd.responsible_name: "Tu Empresa S.L."`, `cif_value: "B00000000"`, `address_value`, `email_value` hardcoded. Si se deploya y el cliente no edita, queda placeholder en producción. **Compliance risk**.
+
+**Solución**: agregar a `IContact`:
+- `legalName: string` (razón social)
+- `cif: string`
+- `legalAddress: string`
+- `legalEmail: string`
+
+Renderizar RGPD/Cookies leyendo de `getContact()` con `getText("rgpd.body_template")` para el cuerpo legal.
+
 ### 7. Simetría admin ↔ visible (YAGNI / KISS / UX-first)
 
 > **Regla canónica del user (2026-05-02)**: "no pones a autoadministrar algo que no está visible".
