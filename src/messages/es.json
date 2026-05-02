@@ -52,7 +52,12 @@
     "cta_title": "¿Querés más información?",
     "cta_subtitle": "Escribinos o reservá una consulta sin compromiso.",
     "cta_book": "Reservar",
-    "cta_whatsapp": "WhatsApp"
+    "cta_whatsapp": "WhatsApp",
+    "section1": { "title": "", "body": "" },
+    "section2": { "title": "", "body": "" },
+    "section3": { "title": "", "body": "" },
+    "section4": { "title": "", "body": "" },
+    "section5": { "title": "", "body": "" }
   },
   "contact": {
     "page_title": "Contacto",

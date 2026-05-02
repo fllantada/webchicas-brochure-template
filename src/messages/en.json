@@ -52,7 +52,12 @@
     "cta_title": "Want more information?",
     "cta_subtitle": "Write to us or book a no-obligation consultation.",
     "cta_book": "Book",
-    "cta_whatsapp": "WhatsApp"
+    "cta_whatsapp": "WhatsApp",
+    "section1": { "title": "", "body": "" },
+    "section2": { "title": "", "body": "" },
+    "section3": { "title": "", "body": "" },
+    "section4": { "title": "", "body": "" },
+    "section5": { "title": "", "body": "" }
   },
   "contact": {
     "page_title": "Contact",

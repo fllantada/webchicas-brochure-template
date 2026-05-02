@@ -126,6 +126,18 @@ const TEMPLATE_DEFAULTS: Record<string, string[]> = {
     "Una breve descripción de tu negocio aquí.",
     "A short description of your business here.",
   ],
+  // Slots de secciones narrativas — todos vacíos en el template; si el cliente
+  // ya editó alguno (no vacío), respetar.
+  "home.section1.title": [""],
+  "home.section1.body": [""],
+  "home.section2.title": [""],
+  "home.section2.body": [""],
+  "home.section3.title": [""],
+  "home.section3.body": [""],
+  "home.section4.title": [""],
+  "home.section4.body": [""],
+  "home.section5.title": [""],
+  "home.section5.body": [""],
 };
 
 function getNested(obj: Record<string, unknown>, dotPath: string): string | undefined {
@@ -157,6 +169,18 @@ interface MigrateMessagesPlan {
   overrides: Record<string, string>;
 }
 
+/**
+ * IDs de sección que NO se renderean como bloques narrativos en home —
+ * son menús, header, footer, navegación o categorías cubiertas por otros
+ * receptáculos (carta tiene su propia /carta, etc.). Skipear acá evita
+ * duplicar contenido en home.
+ */
+const NARRATIVE_SKIP_IDS = new Set([
+  "header", "footer", "nav", "navigation",
+  "carta", "menu", "tarifas", "prices",
+  "contact", "contacto",
+]);
+
 function buildMessagesPlan(
   sections: ExtractedSections,
   businessName: string,
@@ -179,6 +203,20 @@ function buildMessagesPlan(
     overrides["layout.twitter_description"] = sections.hero.subtitle;
     overrides["footer.brand_description"] = sections.hero.subtitle;
   }
+
+  // Secciones narrativas → home.section1..5 (template tiene 5 slots)
+  // Solo render si la sección tiene title + body (excluye headers, navs, carta).
+  const narrative = sections.sections
+    .filter((s) => !NARRATIVE_SKIP_IDS.has(s.id.toLowerCase()))
+    .filter((s) => s.title && s.body && s.body.length >= 30)
+    .slice(0, 5);
+
+  narrative.forEach((s, idx) => {
+    const slot = `section${idx + 1}`;
+    overrides[`home.${slot}.title`] = s.title;
+    overrides[`home.${slot}.body`] = s.body;
+  });
+
   return { overrides };
 }
 
