@@ -53,7 +53,7 @@ done
 echo ""
 echo "[2/4] globals.css no contiene paleta default del template"
 if grep -qE '#F5F2EC|#0D6666' src/app/globals.css; then
-  err "globals.css contiene paleta default (#F5F2EC bg / #0D6666 accent) — extracta no aplicó paleta del original"
+  err "globals.css contiene paleta default (#F5F2EC bg / #0D6666 accent) — correr 'npx tsx scripts/apply-brand.ts'"
 else
   ok "globals.css con paleta del cliente"
 fi
