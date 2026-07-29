@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
+import ConsentPreferences from "@/components/analytics/ConsentPreferences";
+import { TRACKER_IDS } from "@/components/analytics/consent";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("cookies");
@@ -28,9 +30,21 @@ export default async function CookiesPage() {
           <p><span className="text-muted mr-2 uppercase tracking-widest text-xs">{t("email")}</span>{t("email_value")}</p>
         </div>
 
-        <p className="text-muted leading-relaxed border-t border-border pt-8">
-          {t("preferences")}
-        </p>
+        <div className="border-t border-border pt-8">
+          <h2 className="font-heading text-2xl text-ink mb-4 tracking-tight">
+            {t("list_title")}
+          </h2>
+          <ul className="space-y-3 text-muted leading-relaxed list-disc pl-6">
+            <li>{t("list_essential")}</li>
+            {TRACKER_IDS.clarity && <li>{t("list_clarity")}</li>}
+            {TRACKER_IDS.metaPixel && <li>{t("list_meta")}</li>}
+            {TRACKER_IDS.ga && <li>{t("list_ga")}</li>}
+          </ul>
+        </div>
+
+        <p className="text-muted leading-relaxed mt-8">{t("authorization")}</p>
+
+        <ConsentPreferences />
       </div>
     </section>
   );

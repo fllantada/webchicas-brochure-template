@@ -53,11 +53,26 @@
     "cta_subtitle": "Write to us or book a no-obligation consultation.",
     "cta_book": "Book",
     "cta_whatsapp": "WhatsApp",
-    "section1": { "title": "", "body": "" },
-    "section2": { "title": "", "body": "" },
-    "section3": { "title": "", "body": "" },
-    "section4": { "title": "", "body": "" },
-    "section5": { "title": "", "body": "" }
+    "section1": {
+      "title": "",
+      "body": ""
+    },
+    "section2": {
+      "title": "",
+      "body": ""
+    },
+    "section3": {
+      "title": "",
+      "body": ""
+    },
+    "section4": {
+      "title": "",
+      "body": ""
+    },
+    "section5": {
+      "title": "",
+      "body": ""
+    }
   },
   "contact": {
     "page_title": "Contact",
@@ -114,12 +129,28 @@
     "purpose_title": "Purpose",
     "purpose_text": "Cookies are used to improve your experience.",
     "preferences": "Preferences",
-    "authorization": "By continuing to browse you accept the use of cookies.",
+    "authorization": "Non-essential cookies are only set if you accept them in the cookie notice. You can change your decision at any time from this page.",
     "key": "Key",
     "cookie": "Cookie",
     "responsible": "Responsible party",
     "responsible_name": "Your Company Ltd.",
     "email": "Email",
-    "email_value": "info@example.com"
+    "email_value": "info@example.com",
+    "banner_aria": "Cookie notice",
+    "banner_text": "We use cookies to understand how the site is used and improve your experience. They only activate if you accept them; the site works the same without them.",
+    "banner_more": "More info",
+    "banner_accept": "Accept",
+    "banner_reject": "Reject",
+    "list_title": "Cookies this site may use",
+    "list_essential": "Cookie preference (cookie_consent): remembers your decision for 6 months. Technical, no consent required.",
+    "list_clarity": "Microsoft Clarity (_clarity, _clsk): usage analytics — only if you accept.",
+    "list_meta": "Meta Pixel (_fbp): ad campaign measurement — only if you accept.",
+    "list_ga": "Google Analytics (_ga and variants): visit statistics — only if you accept.",
+    "prefs_title": "Your decision",
+    "prefs_state_accepted": "Cookies accepted.",
+    "prefs_state_rejected": "Cookies rejected.",
+    "prefs_state_none": "You haven't decided yet.",
+    "prefs_accept": "Accept cookies",
+    "prefs_reject": "Reject cookies"
   }
 }

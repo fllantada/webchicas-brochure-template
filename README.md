@@ -13,6 +13,7 @@ Cada cliente que arranca con `/migrate` o `/repo-setup brochure` parte de este r
   - 💰 Precios (CRUD por categoría, bilingüe, vista previa)
   - 🖼️ Imágenes (upload, crop, calidad, biblioteca, Vercel Blob + sharp)
 - **Páginas estándar**: Home, Contacto, RGPD, Cookies (todas leen del admin)
+- **Consent de cookies RGPD/AEPD** de fábrica: banner + gating de Clarity/Meta Pixel/GA4 (ver sección abajo)
 - **JSON-LD dinámico** desde datos del admin (LocalBusiness por default)
 - **Sitemap + robots.txt** dinámicos
 - **OG metadata** correcta (1200×630, peso < 300KB)
@@ -57,6 +58,26 @@ El template provee la **base autoadministrable mínima** para cualquier negocio 
 - Contenido → todo se carga via `/admin` después del primer deploy
 
 Si después de usar el template aparece un patrón nuevo que se repite en 2+ clientes, distillarlo y meterlo acá.
+
+## Consent de cookies (RGPD / AEPD)
+
+El template trae el sistema completo en `src/components/analytics/` y se controla 100% por env vars — sin tocar código:
+
+| Env var | Efecto |
+|---------|--------|
+| `NEXT_PUBLIC_COOKIE_CONSENT` | **Switch maestro.** Sin setear o `required` → banner + trackers solo tras "Aceptar" (default seguro, clientes UE). `off` → sin banner, trackers cargan directo (clientes fuera de la UE, ej. Argentina). |
+| `NEXT_PUBLIC_CLARITY_PROJECT_ID` | Activa Microsoft Clarity |
+| `NEXT_PUBLIC_META_PIXEL_ID` | Activa Meta Pixel |
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | Activa Google Analytics 4 |
+
+Comportamiento:
+
+- **Sin ningún tracker configurado no hay banner** (nada que consentir — cookies técnicas no lo requieren).
+- La decisión vive en la cookie first-party `cookie_consent` (6 meses), **legible desde el server**: cualquier evento **Meta CAPI** server-side DEBE gatearse con `hasMarketingConsent()` de `src/server/shared/consent.ts` — ningún evento sin consentimiento.
+- La página `/cookies` lista solo los trackers activos del cliente y permite cambiar la decisión (retirar = tan fácil como dar, criterio AEPD).
+- Los trackers nunca cargan en dev (`NODE_ENV !== "production"`).
+
+**Regla de oro**: si el sitio del cliente es para público de la UE, NUNCA setear `off`. El texto viejo "al continuar navegando aceptás" está prohibido por la AEPD — el template ya no lo usa.
 
 ## Validado en
 
