@@ -25,7 +25,7 @@ export default function MobileStickyCTA({ booksyUrl }: Props) {
 
   return (
     <div
-      className={`lg:hidden fixed left-4 right-4 bottom-4 z-40 transition-all duration-300 ${
+      className={`lg:hidden fixed left-4 right-4 bottom-[calc(var(--cookie-banner-h,0px)+1rem)] z-40 transition-all duration-300 ${
         visible ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0 pointer-events-none"
       }`}
     >

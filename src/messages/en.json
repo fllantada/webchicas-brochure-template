@@ -53,26 +53,11 @@
     "cta_subtitle": "Write to us or book a no-obligation consultation.",
     "cta_book": "Book",
     "cta_whatsapp": "WhatsApp",
-    "section1": {
-      "title": "",
-      "body": ""
-    },
-    "section2": {
-      "title": "",
-      "body": ""
-    },
-    "section3": {
-      "title": "",
-      "body": ""
-    },
-    "section4": {
-      "title": "",
-      "body": ""
-    },
-    "section5": {
-      "title": "",
-      "body": ""
-    }
+    "section1": { "title": "", "body": "" },
+    "section2": { "title": "", "body": "" },
+    "section3": { "title": "", "body": "" },
+    "section4": { "title": "", "body": "" },
+    "section5": { "title": "", "body": "" }
   },
   "contact": {
     "page_title": "Contact",
@@ -128,24 +113,27 @@
     "category": "Category",
     "purpose_title": "Purpose",
     "purpose_text": "Cookies are used to improve your experience.",
-    "preferences": "Preferences",
     "authorization": "Non-essential cookies are only set if you accept them in the cookie notice. You can change your decision at any time from this page.",
+    "authorization_no_consent": "This site uses analytics cookies from your first visit. You can block them from your browser settings.",
     "key": "Key",
     "cookie": "Cookie",
-    "responsible": "Responsible party",
+    "responsible": "Data controller",
     "responsible_name": "Your Company Ltd.",
     "email": "Email",
     "email_value": "info@example.com",
     "banner_aria": "Cookie notice",
-    "banner_text": "We use cookies to understand how the site is used and improve your experience. They only activate if you accept them; the site works the same without them.",
+    "banner_text": "We use cookies from {vendors} to measure how the site is used. They only activate if you accept them; the site works the same without them.",
     "banner_more": "More info",
     "banner_accept": "Accept",
     "banner_reject": "Reject",
     "list_title": "Cookies this site may use",
     "list_essential": "Cookie preference (cookie_consent): remembers your decision for 6 months. Technical, no consent required.",
     "list_clarity": "Microsoft Clarity (_clarity, _clsk): usage analytics — only if you accept.",
+    "list_clarity_always": "Microsoft Clarity (_clarity, _clsk): usage analytics — active from your first visit.",
     "list_meta": "Meta Pixel (_fbp): ad campaign measurement — only if you accept.",
+    "list_meta_always": "Meta Pixel (_fbp): ad campaign measurement — active from your first visit.",
     "list_ga": "Google Analytics (_ga and variants): visit statistics — only if you accept.",
+    "list_ga_always": "Google Analytics (_ga and variants): visit statistics — active from your first visit.",
     "prefs_title": "Your decision",
     "prefs_state_accepted": "Cookies accepted.",
     "prefs_state_rejected": "Cookies rejected.",

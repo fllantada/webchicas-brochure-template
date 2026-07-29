@@ -74,8 +74,14 @@ Comportamiento:
 
 - **Sin ningún tracker configurado no hay banner** (nada que consentir — cookies técnicas no lo requieren).
 - La decisión vive en la cookie first-party `cookie_consent` (6 meses), **legible desde el server**: cualquier evento **Meta CAPI** server-side DEBE gatearse con `hasMarketingConsent()` de `src/server/shared/consent.ts` — ningún evento sin consentimiento.
-- La página `/cookies` lista solo los trackers activos del cliente y permite cambiar la decisión (retirar = tan fácil como dar, criterio AEPD).
-- Los trackers nunca cargan en dev (`NODE_ENV !== "production"`).
+- **Consent versionado por scope**: la cookie guarda la decisión + los trackers vigentes (`accepted:cm`). Si el cliente activa un tracker nuevo, se vuelve a preguntar — el consentimiento viejo no cubre la finalidad nueva.
+- El banner **nombra a los terceros activos** (Microsoft/Meta/Google) en la primera capa, y Aceptar/Rechazar tienen el mismo peso visual (criterio AEPD + WCAG 1.4.11).
+- La página `/cookies` lista solo los trackers activos del cliente y permite cambiar la decisión; **al retirar se borran las cookies ya instaladas** (`_ga`, `_fbp`, `_clarity`…) — criterio AEPD: dejar de cargar no alcanza. En modo `off` el copy se bifurca para no describir un aviso que no existe.
+- Los trackers solo cargan en **producción real** (`NEXT_PUBLIC_VERCEL_ENV === "production"`): ni en dev ni en previews (los previews corren con `NODE_ENV=production` y contaminarían los datos del cliente). Para probar el flujo en local: `NEXT_PUBLIC_VERCEL_ENV=production` en `.env.local`.
+- El banner publica su alto en la CSS var `--cookie-banner-h`; el `MobileStickyCTA` la usa para apilarse encima y no quedar tapado.
+- Como todas las vars son `NEXT_PUBLIC_*`, se **inlinean en build**: cambiarlas exige redeploy (no toman efecto solo desde el dashboard de Vercel).
+
+Estructura (autocontención fractal): `src/lib/consent-contract.ts` (contrato puro compartido browser/server) · `src/components/analytics/Analytics/` (orquestador + `components/` con banner y trackers) · `src/app/[locale]/cookies/components/ConsentPreferences/` (bloque "tu decisión") · `src/server/shared/consent.ts` (gate CAPI).
 
 **Regla de oro**: si el sitio del cliente es para público de la UE, NUNCA setear `off`. El texto viejo "al continuar navegando aceptás" está prohibido por la AEPD — el template ya no lo usa.
 
