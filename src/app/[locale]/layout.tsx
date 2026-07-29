@@ -6,6 +6,7 @@ import { pickLocale, type Locale } from "@/i18n/locales";
 import { HeaderSC } from "@/components/layout/Header/HeaderSC";
 import Footer from "@/components/layout/Footer";
 import MobileStickyCTA from "@/components/ui/MobileStickyCTA";
+import Analytics from "@/components/analytics/Analytics";
 import { getContact } from "@/server/datasources/contact/MongoContactRepo";
 
 export function generateStaticParams() {
@@ -173,6 +174,7 @@ export default async function LocaleLayout({
         <main id="main">{children}</main>
         <Footer contact={plainContact} />
         <MobileStickyCTA booksyUrl={plainContact.booksyUrl} />
+        <Analytics />
       </NextIntlClientProvider>
     </>
   );
